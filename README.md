@@ -30,6 +30,12 @@ argocd login localhost:8080 --username admin --password admin --insecure
 
 ```bash
 argocd account get-user-info
+
+argocd login a0b5fa36904a842c9bcd9232e0d0c936-1242755315.ap-south-1.elb.amazonaws.com:80 --username admin --password 5c0KKgcZ9tW66TZm --insecure
+
+argocd repo add https://github.com/siva912sri/argocdcli.git
+
+argocd app create nginx-demo-cli --repo https://github.com/siva912sri/argocdcli.git --path . --dest-server https://kubernetes.default.svc --dest-namespace default
 ```
 
 ---
@@ -38,6 +44,10 @@ argocd account get-user-info
 
 ```bash
 argocd app list
+
+kubectl -n argocd get applications
+
+kubectl -n argocd describe app demoapp
 ```
 
 ---
@@ -86,6 +96,12 @@ Then rollback using the **revision number** (not commit hash):
 
 ```bash
 argocd app rollback nginx-demo-cli 1
+
+argocd app set nginx-demo-cli --sync-policy automated
+
+kubectl get pods -n default -l app=nginx
+
+kubectl get deployment nginx-demo-cli -n default -o=jsonpath='{.spec.template.spec.containers[*].image}'
 ```
 
 ---
